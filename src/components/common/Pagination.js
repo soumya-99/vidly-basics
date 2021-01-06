@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from "react"
+import PropTypes from "prop-types"
 import _ from "lodash"
 
 function Pagination({ itemsCount, pageSize, onPageChange, currentPage }) {
@@ -15,11 +17,7 @@ function Pagination({ itemsCount, pageSize, onPageChange, currentPage }) {
 						key={page}
 						className={page === currentPage ? "page-item active" : "page-item"}
 					>
-						<a
-							href="localhost:3000"
-							className="page-link"
-							onClick={() => onPageChange(page)}
-						>
+						<a href="#" className="page-link" onClick={() => onPageChange(page)}>
 							{page}
 						</a>
 					</li>
@@ -27,6 +25,14 @@ function Pagination({ itemsCount, pageSize, onPageChange, currentPage }) {
 			</ul>
 		</nav>
 	)
+}
+
+// for debugging application... All Props checking in one place
+Pagination.propTypes = {
+	itemsCount: PropTypes.number.isRequired,
+	pageSize: PropTypes.number.isRequired,
+	onPageChange: PropTypes.func.isRequired,
+	currentPage: PropTypes.number.isRequired,
 }
 
 export default Pagination
