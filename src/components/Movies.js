@@ -6,6 +6,7 @@ import Pagination from "./common/Pagination"
 import { paginate } from "../utils/paginate"
 import ListGroup from "./common/ListGroup"
 import { getGenres } from "../services/fakeGenreService"
+import { filter } from "lodash"
 
 export default class Movies extends Component {
 	state = {
@@ -42,11 +43,20 @@ export default class Movies extends Component {
 
 	render() {
 		const { length: count } = this.state.movies
-		const { pageSize, currentPage, movies: allMovies } = this.state
+		const {
+			pageSize,
+			currentPage,
+			movies: allMovies,
+			selectedGenre,
+		} = this.state
 
 		if (count === 0) return <h4>There are no movies in the Database</h4>
 
-		const movies = paginate(allMovies, currentPage, pageSize)
+		const filtered = selectedGenre
+			? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+			: allMovies
+
+		const movies = paginate(filtered, currentPage, pageSize)
 
 		return (
 			<div className="row">
@@ -59,7 +69,7 @@ export default class Movies extends Component {
 				</div>
 
 				<div className="col">
-					<p>Showing {count} movies in the Database</p>
+					<p>Showing {filtered.length} movies in the Database</p>
 					<table className="table">
 						<thead>
 							<tr>
@@ -97,7 +107,7 @@ export default class Movies extends Component {
 						</tbody>
 					</table>
 					<Pagination
-						itemsCount={count}
+						itemsCount={filtered.length}
 						pageSize={pageSize}
 						currentPage={currentPage}
 						onPageChange={this.handlePageChange}
