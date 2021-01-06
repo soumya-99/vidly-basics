@@ -1,15 +1,15 @@
 import React from "react"
 import Like from "./common/Like"
 
-function MoviesTable({ movies, onDelete, onLike }) {
+function MoviesTable({ movies, onDelete, onLike, onSort }) {
 	return (
 		<table className="table">
 			<thead>
 				<tr>
-					<th>Title</th>
-					<th>Genre</th>
-					<th>Stock</th>
-					<th>Rate</th>
+					<th onClick={() => onSort("title")}>Title</th>
+					<th onClick={() => onSort("genre.name")}>Genre</th>
+					<th onClick={() => onSort("numberInStock")}>Stock</th>
+					<th onClick={() => onSort("dailyRate")}>Rate</th>
 					<th>Like</th>
 					<th>Remove</th>
 				</tr>
@@ -22,10 +22,7 @@ function MoviesTable({ movies, onDelete, onLike }) {
 						<td>{movie.numberInStock}</td>
 						<td>{movie.dailyRentalRate}</td>
 						<td>
-							<Like
-								liked={movie.liked}
-								onClick={() => onLike(movie)}
-							/>
+							<Like liked={movie.liked} onClick={() => onLike(movie)} />
 						</td>
 						<td>
 							<button
