@@ -1,4 +1,5 @@
 import React, { Component } from "react"
+import _ from "lodash"
 
 import { getMovies } from "../services/fakeMovieService"
 import Pagination from "./common/Pagination"
@@ -13,6 +14,7 @@ export default class Movies extends Component {
 		genres: [],
 		pageSize: 4,
 		currentPage: 1,
+		sortColumn: { path: "title", order: "asc" },
 	}
 
 	componentDidMount() {
@@ -41,8 +43,8 @@ export default class Movies extends Component {
 		this.setState({ selectedGenre: genre, currentPage: 1 })
 	}
 
-	handleSort = (path) => {
-		console.log(path)
+	handleSort = (sortColumn) => {
+		this.setState({ sortColumn })
 	}
 
 	render() {
@@ -52,6 +54,7 @@ export default class Movies extends Component {
 			currentPage,
 			movies: allMovies,
 			selectedGenre,
+			sortColumn,
 		} = this.state
 
 		if (count === 0) return <h4>There are no movies in the Database</h4>
@@ -61,7 +64,9 @@ export default class Movies extends Component {
 				? allMovies.filter((m) => m.genre._id === selectedGenre._id)
 				: allMovies
 
-		const movies = paginate(filtered, currentPage, pageSize)
+		const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
+
+		const movies = paginate(sorted, currentPage, pageSize)
 
 		return (
 			<div className="row">
@@ -81,6 +86,7 @@ export default class Movies extends Component {
 						onLike={this.handleLike}
 						onDelete={this.handleDelete}
 						onSort={this.handleSort}
+						sortColumn={sortColumn}
 					/>
 
 					<Pagination
