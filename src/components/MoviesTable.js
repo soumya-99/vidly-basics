@@ -8,7 +8,7 @@ export default class MoviesTable extends Component {
 		{ path: "title", label: "Title" },
 		{ path: "genre.name", label: "Genre" },
 		{ path: "numberInStock", label: "Stock" },
-		{ path: "dailtRentalRate", label: "Rate" },
+		{ path: "dailyRentalRate", label: "Rate" },
 		{
 			key: "like",
 			label: "Like",
