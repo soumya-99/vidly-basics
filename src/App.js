@@ -1,6 +1,7 @@
 import { Redirect, Route, Switch } from "react-router-dom"
 import "./App.css"
 import Customers from "./components/Customers"
+import LoginForm from "./components/LoginForm"
 import MovieForm from "./components/MovieForm"
 import Movies from "./components/Movies"
 import NavBar from "./components/NavBar"
@@ -13,7 +14,8 @@ function App() {
 			<NavBar />
 			<div className="container">
 				<Switch>
-          <Route path="/movies/:id" component={MovieForm} />
+					<Route path="/login" component={LoginForm} />
+					<Route path="/movies/:id" component={MovieForm} />
 					<Route path="/movies" component={Movies}></Route>
 					<Route path="/customers" component={Customers}></Route>
 					<Route path="/rentals" component={Rentals}></Route>
