@@ -4,13 +4,23 @@ import Input from "./common/Input"
 export default class LoginForm extends Component {
 	state = {
 		account: { username: "", password: "" },
+		errors: {},
+	}
+
+	validate = () => {
+		return { username: "Username is required" }
 	}
 
 	handleSubmit = (e) => {
 		e.preventDefault()
 
-		// Call the server
-		console.log("Submitted")
+		const errors = this.validate()
+		this.setState({ errors })
+
+		if (errors) return
+
+		// Call The Server
+		console.log("submitted")
 	}
 
 	handleChange = ({ currentTarget: input }) => {
@@ -24,8 +34,18 @@ export default class LoginForm extends Component {
 			<div>
 				<h1>Login</h1>
 				<form onSubmit={this.handleSubmit}>
-                    <Input name="username" value={account.username} label="Username" onChange={this.handleChange} />
-                    <Input name="password" value={account.password} label="Password" onChange={this.handleChange} />
+					<Input
+						name="username"
+						value={account.username}
+						label="Username"
+						onChange={this.handleChange}
+					/>
+					<Input
+						name="password"
+						value={account.password}
+						label="Password"
+						onChange={this.handleChange}
+					/>
 					<button className="btn btn-primary">Login</button>
 				</form>
 			</div>
