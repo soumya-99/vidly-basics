@@ -9,6 +9,7 @@ export default class LoginForm extends Component {
 
 	validate = () => {
 		const errors = {}
+		// const { errors } = this.state
 
 		const { account } = this.state
 		if (account.username.trim() === "") errors.username = "Username is required"
@@ -21,8 +22,9 @@ export default class LoginForm extends Component {
 		e.preventDefault()
 
 		const errors = this.validate()
-        console.log(errors);
-		this.setState({ errors })
+
+		// if we do not do the errors: errors || {}, it will give "Cannot read property 'username' of null" error in runtime during submission of the form.
+		this.setState({ errors: errors || {} })
 
 		if (errors) return
 
@@ -36,7 +38,7 @@ export default class LoginForm extends Component {
 		this.setState({ account })
 	}
 	render() {
-		const { account } = this.state
+		const { account, errors } = this.state
 		return (
 			<div>
 				<h1>Login</h1>
@@ -46,12 +48,14 @@ export default class LoginForm extends Component {
 						value={account.username}
 						label="Username"
 						onChange={this.handleChange}
+						error={errors.username}
 					/>
 					<Input
 						name="password"
 						value={account.password}
 						label="Password"
 						onChange={this.handleChange}
+						error={errors.password}
 					/>
 					<button className="btn btn-primary">Login</button>
 				</form>
