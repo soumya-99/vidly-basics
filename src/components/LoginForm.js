@@ -41,14 +41,14 @@ export default class LoginForm extends Component {
 	}
 
 	validateProperty = ({ name, value }) => {
-		if (name === "username") {
-			if (value.trim() === "") return "Username is required"
-			//...
-		}
-		if (name === "password") {
-			if (value.trim() === "") return "Password is required"
-			//...
-		}
+		// we use square bracket notation in ES6 to implement dynamic properties... here we don't use 'username' property hardcoded 'cause we need password field also, that's why we use "[name]: value" this type of syntax.
+		const obj = { [name]: value }
+		const schema = { [name]: this.schema[name] }
+		const { error } = Joi.validate(obj, schema)
+		// if (error) return null
+		// return error.details[0].messgae
+		//same as before
+		return error ? error.details[0].message : null
 	}
 
 	handleChange = ({ currentTarget: input }) => {
