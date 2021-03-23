@@ -8,6 +8,7 @@ import ListGroup from "./common/ListGroup"
 import { getGenres } from "../services/fakeGenreService"
 import MoviesTable from "./MoviesTable"
 import { Link } from "react-router-dom"
+import SearchBox from "./common/SearchBox"
 
 export default class Movies extends Component {
 	state = {
@@ -16,6 +17,8 @@ export default class Movies extends Component {
 		pageSize: 4,
 		currentPage: 1,
 		sortColumn: { path: "title", order: "asc" },
+		searchQuery: "",
+		selectedGenre: null,
 	}
 
 	componentDidMount() {
@@ -41,11 +44,16 @@ export default class Movies extends Component {
 	}
 
 	handleGenreSelect = (genre) => {
-		this.setState({ selectedGenre: genre, currentPage: 1 })
+		// we can't use null or undefined while using Controled Components... That's why we use searchQuery: "" as an empty string.
+		this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 })
 	}
 
 	handleSort = (sortColumn) => {
 		this.setState({ sortColumn })
+	}
+
+	handleSearch = (query) => {
+		this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 })
 	}
 
 	getPageData = () => {
@@ -55,12 +63,21 @@ export default class Movies extends Component {
 			movies: allMovies,
 			selectedGenre,
 			sortColumn,
+			searchQuery,
 		} = this.state
 
-		const filtered =
-			selectedGenre && selectedGenre._id
-				? allMovies.filter((m) => m.genre._id === selectedGenre._id)
-				: allMovies
+		// const filtered =
+		// 	selectedGenre && selectedGenre._id
+		// 		? allMovies.filter((m) => m.genre._id === selectedGenre._id)
+		// 		: allMovies
+
+		let filtered = allMovies
+		if (searchQuery)
+			filtered = allMovies.filter((m) =>
+				m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+			)
+		else if (selectedGenre && selectedGenre._id)
+			filtered = allMovies.filter((m) => m.genre._id === selectedGenre._id)
 
 		const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order])
 
@@ -71,7 +88,7 @@ export default class Movies extends Component {
 
 	render() {
 		const { length: count } = this.state.movies
-		const { pageSize, currentPage, sortColumn } = this.state
+		const { pageSize, currentPage, sortColumn, searchQuery } = this.state
 
 		if (count === 0) return <h4>There are no movies in the Database</h4>
 
@@ -96,6 +113,8 @@ export default class Movies extends Component {
 						New Movie
 					</Link>
 					<p>Showing {totalCount} movies in the Database</p>
+
+					<SearchBox value={searchQuery} onChange={this.handleSearch} />
 
 					<MoviesTable
 						movies={movies}
