@@ -40,6 +40,11 @@ function NavBar() {
 							Login
 						</NavLink>
 					</li>
+					<li>
+						<NavLink className="nav-link" to="/register">
+							Register
+						</NavLink>
+					</li>
 				</ul>
 			</div>
 		</nav>
